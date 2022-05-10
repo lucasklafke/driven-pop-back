@@ -8,6 +8,4 @@ const app = express()
 
 dotenv.config()
 
-PORT = process.env.PORT
-
-app.listen(PORT)
+app.listen(process.env.PORT)
