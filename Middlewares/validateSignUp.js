@@ -1,6 +1,6 @@
 import signUpSchema from "../Schemas/signUpSchema.js"
 
-function validateSignUp(req,res,next){
+export default async function validateSignUp(req,res,next){
     const validation = signUpSchema.validate(req.body)
     
     if(validation.error){
@@ -8,4 +8,4 @@ function validateSignUp(req,res,next){
         return res.status(500).send(validation.error)
     }
 
-}
+} 

@@ -1,4 +1,4 @@
-import express from "express"
+import express , {json} from "express"
 import cors from "cors"
 import joi from "joi"
 import dotenv from "dotenv"
@@ -13,6 +13,6 @@ dotenv.config()
 
 app.use(json())
 app.use(cors())
-app.use(authRouter())
+app.use(authRouter)
 
 app.listen(process.env.PORT)
