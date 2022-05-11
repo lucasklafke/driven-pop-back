@@ -2,10 +2,10 @@ import signUpSchema from "../Schemas/signUpSchema.js"
 import db from "../db.js"
 export default async function validateSignUp(req,res,next){
     const {email} = req.body
-    const validation = signUpSchema.validate(req.body)
+    const {error} = signUpSchema.validate(req.body)
     
-    if(validation.error){
-        return res.status(500).send("validation",validation.error)
+    if(error){
+        return res.status(500).send("validation",error)
     }
     try{
         const users = db.collection("users")
