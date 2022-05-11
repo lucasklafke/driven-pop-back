@@ -11,6 +11,6 @@ export async function signUp(req,res){
         await users.insertOne({ name, email, encryptedPassword, date})
         res.send("user created!")
     }catch(error){
-        res.send(error)
+        res.send("connection failed")
     }
 }
