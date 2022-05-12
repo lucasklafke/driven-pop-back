@@ -1,10 +1,10 @@
-import express from "express"
+import { Router } from "express";
+import { login, signUp } from "../Controllers/authController.js";
+import validateLogin from "../Middlewares/validateLogin.js";
+import validateSignUp from "../Middlewares/validateSignUp.js";
 
-import validateSignUp from "../Middlewares/validateSignUp.js"
-import { signUp } from "../Controllers/authController.js"
+const authRouter = Router();
+authRouter.post("/login", validateLogin, login);
+authRouter.post("/sign-up", validateSignUp, signUp);
 
-const authRouter = express.Router()
-
-authRouter.post("/sign-up", validateSignUp, signUp)
-
-export default authRouter
+export default authRouter;
