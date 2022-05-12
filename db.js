@@ -6,10 +6,10 @@ let db;
 const mongoClient = new MongoClient(process.env.MONGO_URL);
 try {
   await mongoClient.connect();
-  db = mongoClient.db(process.env.DB);
-  console.log(`Connected to ${process.env.DB} mongoDB database`);
+  db = mongoClient.db("drivenPop");
+  console.log("Connected to drivenPop mongoDB database");
 } catch (e) {
-  console.log(`Failed to connect to ${process.env.DB} mongoDB database`, e);
+  console.log("Failed to connect to drivenPop mongoDB database", e);
 }
 
 export default db;
