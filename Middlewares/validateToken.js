@@ -8,7 +8,7 @@ export default async function validateToken(req,res,next){
 
     try{
         const sessions = db.collection("sessions")
-        const session = sessions.findOne({token})
+        const session = await sessions.findOne({token})
         if (!session) { return res.status(404).send("token not found")}
 
     }catch(error){
