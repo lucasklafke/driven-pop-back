@@ -11,6 +11,7 @@ export default async function validateToken(req,res,next){
         const session = await sessions.findOne({token})
         if (!session) { return res.status(404).send("token not found")}
 
+        res.locals.session = session
     }catch(error){
         res.send("something went wrong!")
     }

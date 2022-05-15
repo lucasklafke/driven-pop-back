@@ -1,7 +1,7 @@
 import db from "../db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
-
+import dayjs from "dayjs"
 export async function login(req, res) {
   const { email, password } = req.body;
   try {
@@ -32,5 +32,34 @@ export async function signUp(req, res) {
     res.send("user created!");
   } catch (error) {
     res.send("connection failed");
+  }
+}
+
+export async function checkout(req,res){
+  const products = req.body
+  if(!products){
+    return res.send("missing products")
+  }
+  const date = dayjs().format("DD/MM/YYYY")
+  const {user, _id} = res.locals.session
+  let amount = 0
+  products.forEach(product => {
+    amount += Number(product.price)
+  })
+
+  const checkout = {
+    sessionId:_id,
+    amount,
+    products,
+    user,
+    date,
+  }
+
+  try{
+    const checkouts = db.collection("checkouts")
+    const response = await checkouts.insertOne(checkout)
+    console.log(response)
+  }catch(error){
+    res.status(500).send(error)
   }
 }
