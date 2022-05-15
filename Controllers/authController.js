@@ -36,7 +36,7 @@ export async function signUp(req, res) {
 }
 
 export async function checkout(req,res){
-  const products = req.body
+  const {products,userInfos} = req.body
   if(!products){
     return res.send("missing products")
   }
@@ -59,7 +59,35 @@ export async function checkout(req,res){
     const checkouts = db.collection("checkouts")
     const response = await checkouts.insertOne(checkout)
     console.log(response)
+    res.send("purchase made")
   }catch(error){
     res.status(500).send(error)
+  }
+}
+
+export  async function getUserCheckoutInfos(req, res) {
+  const { email } = req.headers
+
+  if(!email){
+    return res.send("missing email")
+  }
+  try {
+    const users = db.collection("users")
+    const user = users.findOne({ email })
+
+    if (!(user.checkoutInfos)) {
+      return res.status(500).send("checkout infos not found")
+    }
+    res.send(user.checkoutInfos)
+  } catch (error) {
+      res.send(error)
+  }
+}
+
+export async function addCheckoutInfo(req,res){
+  const {infos} = req.body
+
+  try{
+    
   }
 }
