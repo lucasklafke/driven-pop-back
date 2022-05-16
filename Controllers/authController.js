@@ -1,7 +1,9 @@
 import db from "../db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
-import dayjs from "dayjs"
+
+import dayjs from "dayjs";
+
 export async function login(req, res) {
   const { email, password } = req.body;
   try {
