@@ -37,3 +37,30 @@ export async function getProduct(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function addToCart(req, res) {
+  const { authorization } = req.headers;
+  const { products } = req.body;
+  const token = authorization.replace("Bearer", "").trim();
+  try {
+    const session = db.collection("sessions");
+    await session.updateOne({ token: token }, { $set: { cart: products } });
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
+
+export async function getCart(req, res) {
+  const { authorization } = req.headers;
+  const token = authorization.replace("Bearer", "").trim();
+  try {
+    const session = db.collection("sessions");
+    const products = await session.findOne({ token: token });
+    res.send(products.cart);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
