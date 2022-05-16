@@ -1,8 +1,7 @@
 import db from "../db.js"
 import checkoutInfosSchema from "../Schemas/checkoutInfosSchema.js"
 export default async function validateUserCheckoutInfos(req,res,next){
-    const { checkoutData } = req.body
-    const validation = checkoutInfosSchema.validate(req.body)
+    const validation = checkoutInfosSchema.validate(req.body.userInfos)
     
     if(validation.error){
         console.log(validation.error)
