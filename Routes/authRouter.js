@@ -9,6 +9,8 @@ import validateLogin from "../Middlewares/validateLogin.js";
 import validateSignUp from "../Middlewares/validateSignUp.js";
 
 import validateToken from "../Middlewares/validateToken.js";
+import validateUserCheckoutInfos from  "../Middlewares/validateCheckoutInfos.js"
+
 const authRouter = Router();
 
 authRouter.post("/login", validateLogin, login);
