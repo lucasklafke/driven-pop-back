@@ -6,7 +6,7 @@ export default async function validateUserCheckoutInfos(req,res,next){
     
     if(validation.error){
         console.log(validation.error)
-        return res.status(500).send(validation.error)
+        return res.status(500).send(validation.error.message)
     }
     next()
 }

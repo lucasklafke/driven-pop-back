@@ -8,6 +8,6 @@ const authRouter = Router();
 
 authRouter.post("/login", validateLogin, login);
 authRouter.post("/sign-up", validateSignUp, signUp);
-authRouter.post("/checkout", validateToken, checkout)
+authRouter.post("/checkout", validateUserCheckoutInfos, validateToken, checkout)
 
 export default authRouter;
