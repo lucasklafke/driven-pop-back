@@ -1,6 +1,6 @@
 import db from "../db.js"
 import checkoutInfosSchema from "../Schemas/checkoutInfosSchema.js"
-export default async function verifyUserCheckoutInfos(req,res,next){
+export default async function validateUserCheckoutInfos(req,res,next){
     
     const validation = checkoutInfosSchema.validate(req.body)
     

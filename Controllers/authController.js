@@ -66,14 +66,15 @@ export async function checkout(req,res){
 }
 
 export  async function getUserCheckoutInfos(req, res) {
-  const { email } = req.headers
+  const session = res.locals.session
+  const {user} = session.user 
 
-  if(!email){
-    return res.send("missing email")
+  if (!user){
+    return res.send("user not found")
   }
   try {
     const users = db.collection("users")
-    const user = users.findOne({ email })
+    const user = users.findOne({ email: user })
 
     if (!(user.checkoutInfos)) {
       return res.status(500).send("checkout infos not found")
@@ -86,8 +87,14 @@ export  async function getUserCheckoutInfos(req, res) {
 
 export async function addCheckoutInfo(req,res){
   const {infos} = req.body
-
+  const session = res.locals.session
+  const sessionToken = session.token
   try{
-    
+
+    const checkoutsCollection = db.collection("checkouts")
+    await checkoutsCollection.insertOne({sessionToken,infos})
+    res.send("infos added")
+  }catch(error){
+    res.send(error)
   }
 }
