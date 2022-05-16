@@ -37,35 +37,50 @@ export async function signUp(req, res) {
   }
 }
 
-export async function checkout(req,res){
-  const {products,userInfos} = req.body
-  if(!products){
-    return res.send("missing products")
+export async function checkout(req, res) {
+  const { products, userInfos } = req.body;
+  if (!products) {
+    return res.send("missing products");
   }
-  const date = dayjs().format("DD/MM/YYYY")
-  const {user, _id} = res.locals.session
-  console.log(products)
-  let amount = 0
-  products.forEach(product => {
-    const newPrice = product.price.replace("R$", "").split(",")
-    amount += (Number(newPrice[0]) * Number(product.quantity))
-  })
+  const date = dayjs().format("DD/MM/YYYY");
+  const { user, _id } = res.locals.session;
+  console.log(products);
+  let amount = 0;
+  products.forEach((product) => {
+    const newPrice = product.price.replace("R$", "").split(",");
+    amount += Number(newPrice[0]) * Number(product.quantity);
+  });
 
   const checkout = {
-    sessionId:_id,
+    sessionId: _id,
     amount,
     products,
     user,
     userInfos,
     date,
-  }
+  };
 
-  try{
-    const checkouts = db.collection("checkouts")
-    const response = await checkouts.insertOne(checkout)
-    console.log(response)
-    res.send("purchase made")
-  }catch(error){
-    res.status(500).send(error)
+  try {
+    const checkouts = db.collection("checkouts");
+    const response = await checkouts.insertOne(checkout);
+    console.log(response);
+    res.send("purchase made");
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
+export async function getCheckouts(req, res) {
+  const { authorization } = req.headers;
+  const token = authorization.replace("Bearer", "").trim();
+  try {
+    const user = await db.collection("sessions").findOne({ token: token });
+    const checkouts = await db
+      .collection("checkouts")
+      .find({ user: user.user })
+      .toArray();
+    res.send(checkouts);
+  } catch (error) {
+    res.sendStatus(500);
   }
 }
