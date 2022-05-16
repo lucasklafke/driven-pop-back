@@ -44,9 +44,11 @@ export async function checkout(req,res){
   }
   const date = dayjs().format("DD/MM/YYYY")
   const {user, _id} = res.locals.session
+  console.log(products)
   let amount = 0
   products.forEach(product => {
-    amount += Number(product.price)
+    const newPrice = product.price.replace("R$", "").split(",")
+    amount += (Number(newPrice[0]) * Number(product.quantity))
   })
 
   const checkout = {
@@ -54,6 +56,7 @@ export async function checkout(req,res){
     amount,
     products,
     user,
+    userInfos,
     date,
   }
 
@@ -64,39 +67,5 @@ export async function checkout(req,res){
     res.send("purchase made")
   }catch(error){
     res.status(500).send(error)
-  }
-}
-
-export  async function getUserCheckoutInfos(req, res) {
-  const session = res.locals.session
-  const {user} = session.user 
-
-  if (!user){
-    return res.send("user not found")
-  }
-  try {
-    const users = db.collection("users")
-    const user = users.findOne({ email: user })
-
-    if (!(user.checkoutInfos)) {
-      return res.status(500).send("checkout infos not found")
-    }
-    res.send(user.checkoutInfos)
-  } catch (error) {
-      res.send(error)
-  }
-}
-
-export async function addCheckoutInfo(req,res){
-  const {infos} = req.body
-  const session = res.locals.session
-  const sessionToken = session.token
-  try{
-
-    const checkoutsCollection = db.collection("checkouts")
-    await checkoutsCollection.insertOne({sessionToken,infos})
-    res.send("infos added")
-  }catch(error){
-    res.send(error)
   }
 }
